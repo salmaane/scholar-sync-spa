@@ -4,7 +4,9 @@ import { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 type configObj = {
     method : 'get' | 'post' | 'put' | 'delete' | 'patch',
     url: string,
-    requestConfig: AxiosRequestConfig
+    requestConfig: AxiosRequestConfig,
+    handleResponse: (data: any) => void;
+    handleError: (error: any) => void;
 }
 
 const useAxiosFunction = (axiosInstance : AxiosInstance) => {
@@ -13,19 +15,19 @@ const useAxiosFunction = (axiosInstance : AxiosInstance) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [controller, setController] = useState<AbortController>();
 
-    const axiosFetch = ({ method, url, requestConfig } : configObj) => {
+    const axiosFetch = ({ method, url, requestConfig, handleResponse, handleError } : configObj) => {
         setLoading(true);
         const ctrl = new AbortController();
         setController(ctrl);
         
         axiosInstance[method](url, {...requestConfig, signal: ctrl.signal})
-        .then(res => {
-            setData(res);
-            console.log(res)
+        .then(response => {
+            setData(response.data);
+            handleResponse(response.data);
         })
         .catch(err => {
             setError(err);
-            console.log(err);
+            handleError(err);
         })
         .finally(()  => {
             setLoading(false);

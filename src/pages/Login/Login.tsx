@@ -6,6 +6,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Heading,
   Icon,
   Input,
@@ -14,25 +15,69 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-// React router
-import { NavLink } from "react-router-dom";
+import { Formik, Field, Form} from "formik";
+import * as Yup from "yup";
+// React router & auth kit
+import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 // Custom components
 import { HSeparator } from "../../components/Separator/Separator";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+// axios
+import axios from '../../apis/scholarSync'
+import useAxiosFunction from "../../hooks/useAxiosFunction";
+
+type formValues = {
+  email: string,
+  password: string, 
+  remember: boolean
+}
+
+const FORM_VALIDATION = Yup.object().shape({
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
+});
 
 const Login = () => {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
-  const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
+  const signIn = useSignIn();
+  const navigate = useNavigate();
+  const [ , , loading, axiosFetch] = useAxiosFunction(axios);
+
+  const onSubmit = (values : formValues, actions : any) => {
+    axiosFetch({
+      method: "post",
+      url: "/auth/authenticate",
+      requestConfig: {
+        email: values.email,
+        password: values.password,
+      },
+      handleResponse: (data: any) => {
+        signIn({
+          auth: {
+            token: data.accessToken,
+          },
+          refresh: data.refreshToken,
+        });
+        navigate("/", { replace: true });
+      },
+      handleError: (err: any) => {
+        console.log(err)
+      },
+    });
+    
+    actions.setSubmitting(false);
+  }
+
   return (
-    <Flex alignItems={"center"} justifyContent={"center"} height={"100vh"}>
+    <Flex alignItems="center" justifyContent="center" height="100vh">
       <Flex
         maxW={{ base: "100%", md: "max-content" }}
         w="100%"
@@ -78,97 +123,136 @@ const Login = () => {
             </Text>
             <HSeparator />
           </Flex>
-          <FormControl>
-            <FormLabel
-              display="flex"
-              ms="4px"
-              fontSize="sm"
-              fontWeight="500"
-              color={textColor}
-              mb="8px"
-            >
-              Email
-              <Text color={brandStars}>*</Text>
-            </FormLabel>
-            <Input
-              isRequired={true}
-              variant="auth"
-              fontSize="sm"
-              ms={{ base: "0px", md: "0px" }}
-              type="email"
-              placeholder="mail@uae.ac.ma"
-              mb="24px"
-              fontWeight="500"
-              size="lg"
-            />
-            <FormLabel
-              ms="4px"
-              fontSize="sm"
-              fontWeight="500"
-              color={textColor}
-              display="flex"
-            >
-              Password
-              <Text color={brandStars}>*</Text>
-            </FormLabel>
-            <InputGroup size="md">
-              <Input
-                isRequired={true}
-                fontSize="sm"
-                placeholder="Min. 8 characters"
-                mb="24px"
-                size="lg"
-                type={show ? "text" : "password"}
-                variant="auth"
-              />
-              <InputRightElement display="flex" alignItems="center" mt="4px">
-                <Icon
-                  color={textColorSecondary}
-                  _hover={{ cursor: "pointer" }}
-                  as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                  onClick={handleClick}
-                />
-              </InputRightElement>
-            </InputGroup>
-            <Flex justifyContent="space-between" align="center" mb="24px">
-              <FormControl display="flex" alignItems="center">
-                <Checkbox
-                  id="remember-login"
-                  colorScheme="brandScheme"
-                  me="10px"
-                />
-                <FormLabel
-                  htmlFor="remember-login"
-                  mb="0"
-                  fontWeight="normal"
-                  color={textColor}
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+              remember: false,
+            }}
+            validationSchema={FORM_VALIDATION}
+            onSubmit={onSubmit}
+          >
+            {() => (
+              <Form>
+                <Field name="email">
+                  {({ field, form }: any) => (
+                    <FormControl
+                      isInvalid={form.errors.email && form.touched.email}
+                      mb="24px"
+                    >
+                      <FormLabel
+                        display="flex"
+                        ms="4px"
+                        fontSize="sm"
+                        fontWeight="500"
+                        color={textColor}
+                        mb="8px"
+                      >
+                        Email
+                        <Text color={brandStars}>*</Text>
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        isRequired={true}
+                        variant="auth"
+                        fontSize="sm"
+                        ms={{ base: "0px", md: "0px" }}
+                        type="email"
+                        placeholder="mail@uae.ac.ma"
+                        fontWeight="500"
+                        size="lg"
+                        onChange={form.handleChange}
+                      />
+                      <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
+                <Field name="password">
+                  {({ field, form }: any) => (
+                    <FormControl
+                      isInvalid={form.errors.password && form.touched.password}
+                      mb="24px"
+                    >
+                      <FormLabel
+                        ms="4px"
+                        fontSize="sm"
+                        fontWeight="500"
+                        color={textColor}
+                        display="flex"
+                      >
+                        Password
+                        <Text color={brandStars}>*</Text>
+                      </FormLabel>
+                      <InputGroup size="md">
+                        <Input
+                          {...field}
+                          isRequired={true}
+                          fontSize="sm"
+                          placeholder="Min. 8 characters"
+                          size="lg"
+                          type={show ? "text" : "password"}
+                          variant="auth"
+                          onChange={form.handleChange}
+                        />
+                        <InputRightElement
+                          display="flex"
+                          alignItems="center"
+                          mt="4px"
+                        >
+                          <Icon
+                            color={textColorSecondary}
+                            _hover={{ cursor: "pointer" }}
+                            as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                            onClick={handleClick}
+                          />
+                        </InputRightElement>
+                      </InputGroup>
+                      <FormErrorMessage>
+                        {form.errors.password}
+                      </FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+                <Flex justifyContent="space-between" align="center" mb="24px">
+                  <FormControl display="flex" alignItems="center">
+                    <Field name="remember">
+                      {({ field }: any) => (
+                        <Checkbox
+                          {...field}
+                          id="remember-login"
+                          colorScheme="brandScheme"
+                          me="10px"
+                        />
+                      )}
+                    </Field>
+                    <FormLabel
+                      htmlFor="remember-login"
+                      mb="0"
+                      fontWeight="normal"
+                      color={textColor}
+                      fontSize="sm"
+                    >
+                      Keep me logged in
+                    </FormLabel>
+                  </FormControl>
+                </Flex>
+                <Button
                   fontSize="sm"
-                >
-                  Keep me logged in
-                </FormLabel>
-              </FormControl>
-              <NavLink to="/auth/forgot-password">
-                <Text
-                  color={textColorBrand}
-                  fontSize="sm"
-                  w="124px"
+                  variant="brand"
                   fontWeight="500"
+                  w="100%"
+                  h="50"
+                  mb="24px"
+                  type="submit"
+                  isLoading={loading}
+                  _hover={{  }}
                 >
-                  Forgot password?
-                </Text>
-              </NavLink>
-            </Flex>
-            <Button
-              fontSize="sm"
-              variant="brand"
-              fontWeight="500"
-              w="100%"
-              h="50"
-              mb="24px"
-            >
-              Sign In
-            </Button>
-          </FormControl>
+                  Sign In
+                </Button>
+              </Form>
+            )}
+          </Formik>
         </Flex>
       </Flex>
     </Flex>
