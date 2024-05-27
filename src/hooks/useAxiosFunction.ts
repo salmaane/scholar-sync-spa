@@ -23,11 +23,11 @@ const useAxiosFunction = (axiosInstance : AxiosInstance) => {
         axiosInstance[method](url, {...requestConfig, signal: ctrl.signal})
         .then(response => {
             setData(response.data);
-            handleResponse(response.data);
+            handleResponse?.(response.data);
         })
         .catch(err => {
             setError(err);
-            handleError(err);
+            handleError?.(err);
         })
         .finally(()  => {
             setLoading(false);

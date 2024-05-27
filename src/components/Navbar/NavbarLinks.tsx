@@ -12,6 +12,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 // Custom Components
 import { SearchBar } from "./SearchBar/SearchBar";
 import ItemContent from "../menu/ItemContent";
@@ -19,6 +20,12 @@ import { SidebarResponsive } from "../Sidebar/Sidebar";
 // Assets
 import { MdNotificationsNone, MdInfoOutline } from "react-icons/md";
 import routes from "../../context/routes";
+// axios
+import useAxiosFunction from "../../hooks/useAxiosFunction";
+import axios from "../../apis/scholarSync";
+// react auth kit
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import useSignOut from "react-auth-kit/hooks/useSignOut";
 
 export default function Navbar(props : navbarProps) {
   const { secondary } = props;
@@ -33,6 +40,26 @@ export default function Navbar(props : navbarProps) {
     "14px 17px 40px 4px rgba(112, 144, 176, 0.06)"
   );
   const borderButton = useColorModeValue("secondaryGray.500", "whiteAlpha.200");
+
+  const navigate = useNavigate();
+  const signOut = useSignOut();
+  const authHeader = useAuthHeader();
+  const [ , , , axiosFetch] = useAxiosFunction(axios);
+
+  const logout = () => {
+      axiosFetch({
+        url: "/auth/logout",
+        method: "get",
+        requestConfig: {
+          headers: {
+            'Authorization': authHeader
+          }
+        },
+      });
+
+      signOut();
+      navigate("/login", {replace: true});
+  }
 
   return (
     <Flex
@@ -136,9 +163,7 @@ export default function Navbar(props : navbarProps) {
           maxW={{ base: "360px", md: "unset" }}
         >
           <Flex flexDirection="column">
-            <Link
-              w="100%"
-            >
+            <Link w="100%">
               <Button
                 w="100%"
                 h="44px"
@@ -212,6 +237,7 @@ export default function Navbar(props : navbarProps) {
               color="red.400"
               borderRadius="8px"
               px="14px"
+              onClick={logout}
             >
               <Text fontSize="sm">Log out</Text>
             </MenuItem>

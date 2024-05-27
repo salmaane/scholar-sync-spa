@@ -18,8 +18,9 @@ import {
 import { Formik, Field, Form} from "formik";
 import * as Yup from "yup";
 // React router & auth kit
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
+import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 // Custom components
 import { HSeparator } from "../../components/Separator/Separator";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
@@ -40,13 +41,18 @@ const FORM_VALIDATION = Yup.object().shape({
 });
 
 const Login = () => {
+  const isAuthenticated = useIsAuthenticated();
+  if(isAuthenticated) {
+    return <Navigate to={'/'} replace={true}/> 
+  }
+  
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-
+  
   const signIn = useSignIn();
   const navigate = useNavigate();
   const [ , , loading, axiosFetch] = useAxiosFunction(axios);
@@ -63,6 +69,7 @@ const Login = () => {
         signIn({
           auth: {
             token: data.accessToken,
+            type: 'Bearer',
           },
           refresh: data.refreshToken,
         });
