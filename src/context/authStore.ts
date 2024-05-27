@@ -3,22 +3,17 @@ import createRefresh from 'react-auth-kit/createRefresh';
 import axios from 'axios';
 
 const refreshApi = createRefresh({
-    interval: 15, // minutes
-    refreshApiCallback: async ({
-        authToken,
-        refreshToken,
-        authUserState,
-    }) => {
-        console.log(authToken)
-        console.log(authUserState)
-        console.log(refreshToken)
+    interval: 20, // secondes
+    refreshApiCallback: async ({refreshToken}) => {
         try {
-            const res = await axios.post('/refresh-token', { refreshToken });
-
+            const res = await axios.post(import.meta.env.VITE_SCHOLAR_SYNC_URL +'/auth/refresh-token', {
+              headers: {'Authorization': `Bearer ${refreshToken}`}
+            });
+            console.log("Refreshing")
             return {
                 isSuccess: true,
                 newAuthToken: res.data.accessToken,
-                newAuthTokenExpireIn: 15,
+                newAuthTokenExpireIn: 10,
             };
         } catch (err) {
             console.log(err);

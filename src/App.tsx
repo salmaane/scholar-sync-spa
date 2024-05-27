@@ -6,7 +6,7 @@ import theme from "./theme/theme";
 // auth kit
 import AuthProvider from "react-auth-kit";
 import store from './context/authStore';
-import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
+// import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
 // Components
 import Login from './pages/Login/Login';
 import RootLayout from './pages/Layout/RootLayout';
@@ -18,9 +18,9 @@ const router = createBrowserRouter(
     <Route>
       <Route path='/login' element={<Login/>}/>
       <Route path='/' element={<RootLayout/>}>
-        <Route element={<AuthOutlet fallbackPath='login'/>}>
+        {/* <Route element={<AuthOutlet fallbackPath='login'/>}> */}
           <Route index element={<Dashboard/>}/>
-        </Route>
+        {/* </Route> */}
       </Route>
     </Route>
   )
@@ -28,13 +28,13 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-        <div className='app'>
-          <AuthProvider store={store}>
-            <RouterProvider router={router}/>
-          </AuthProvider>
-        </div>
-    </ChakraProvider>
+    <main className='app'>
+      <ChakraProvider theme={theme}>
+        <AuthProvider store={store}>
+          <RouterProvider router={router}/>
+        </AuthProvider>
+      </ChakraProvider>
+    </main>
   )
 }
 
