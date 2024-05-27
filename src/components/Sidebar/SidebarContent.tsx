@@ -5,7 +5,6 @@ import Links from "./Links";
 
 const SidebarContent = (props : any) => {
   const { routes } = props;
-  console.log(routes);
 
   return (
     <Flex

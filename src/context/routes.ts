@@ -36,28 +36,24 @@ const routes : route[] = [
     layout: "/admin",
     icon: MdBarChart,
     path: "/data-tables",
-    
   },
   {
     name: "Profile",
     layout: "/admin",
     path: "/profile",
     icon: MdPerson,
-    
   },
   {
     name: "Sign In",
     layout: "/auth",
     path: "/login",
     icon: MdLock,
-    
   },
   {
     name: "RTL Admin",
     layout: "/rtl",
     path: "/rtl-default",
     icon: MdHome,
-    
   },
 ];
 
