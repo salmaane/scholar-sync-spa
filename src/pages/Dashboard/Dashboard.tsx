@@ -1,10 +1,7 @@
-import { Heading } from "@chakra-ui/react"
 
 const Dashboard = () => {
   return (
-    <>
-      <Heading>Dashboard Page</Heading>
-    </>
+    <div>Dashboard</div>
   );
 }
 

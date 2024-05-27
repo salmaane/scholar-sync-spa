@@ -12,9 +12,11 @@ import {
 import { useState, useEffect } from "react";
 import AdminNavbarLinks from "./NavbarLinks";
 import routes from "../../context/routes";
+import { useLocation } from "react-router-dom";
 
 export default function AdminNavbar(props : NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [title, setTitle] = useState<string>(); 
 
   useEffect(() => {
     window.addEventListener("scroll", changeNavbar);
@@ -25,8 +27,20 @@ export default function AdminNavbar(props : NavbarProps) {
   });
 
   const { secondary, message } = props;
+  const location = useLocation();
+  
+  useEffect(() => {
+    // const title = routes.filter((route) => {
+    //   const regex = new RegExp(`^${route.name}(/|$)`);
+    //   console.log(regex.test(location.pathname));
+    //   return regex.test(location.pathname);
+    // })[0]?.name;
 
-  const title = routes.find(route => route.path == location.pathname)?.name;  
+    //  setTitle(title);
+
+    //  console.log(title)
+  }, [location]);
+
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText = useColorModeValue("navy.700", "white");

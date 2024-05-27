@@ -1,10 +1,5 @@
-import {
-  MdBarChart,
-  MdPerson,
-  MdHome,
-  MdLock,
-  MdOutlineShoppingCart,
-} from "react-icons/md";
+import { MdHome} from "react-icons/md";
+import { HiMiniUsers } from "react-icons/hi2";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import { IconType } from "react-icons/lib";
 import { ComponentType} from "react";
@@ -26,28 +21,10 @@ const routes : route[] = [
     component: Dashboard
   },
   {
-    name: "NFT Marketplace",
+    name: "Users",
     layout: "/admin",
-    path: "/nft-marketplace",
-    icon: MdOutlineShoppingCart,
-  },
-  {
-    name: "Data Tables",
-    layout: "/admin",
-    icon: MdBarChart,
-    path: "/data-tables",
-  },
-  {
-    name: "Profile",
-    layout: "/admin",
-    path: "/profile",
-    icon: MdPerson,
-  },
-  {
-    name: "Sign In",
-    layout: "/auth",
-    path: "/login",
-    icon: MdLock,
+    path: "/users",
+    icon: HiMiniUsers,
   },
   {
     name: "RTL Admin",

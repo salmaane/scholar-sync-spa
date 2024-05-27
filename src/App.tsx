@@ -6,21 +6,23 @@ import theme from "./theme/theme";
 // auth kit
 import AuthProvider from "react-auth-kit";
 import store from './context/authStore';
-import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
+// import AuthOutlet from "@auth-kit/react-router/AuthOutlet";
 // Components
 import Login from './pages/Login/Login';
 import RootLayout from './pages/Layout/RootLayout';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Users from './pages/Users/Users';
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path='/login' element={<Login/>}/>
-      <Route path='/' element={<RootLayout/>}>
-        <Route element={<AuthOutlet fallbackPath='login'/>}>
+      <Route path={'/'} element={<RootLayout/>}>
+        {/* <Route element={<AuthOutlet fallbackPath='login'/>}> */}
           <Route index element={<Dashboard/>}/>
-        </Route>
+          <Route path='users/admins' element={<Users/>}/>
+        {/* </Route> */}
       </Route>
     </Route>
   )
