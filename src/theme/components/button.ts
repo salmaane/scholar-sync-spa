@@ -1,5 +1,5 @@
 import { mode } from "@chakra-ui/theme-tools";
-import { StyleFunctionProps } from "@chakra-ui/react";
+import { StyleFunctionProps, border } from "@chakra-ui/react";
 export const buttonStyles = {
   components: {
     Button: {
@@ -48,6 +48,54 @@ export const buttonStyles = {
         lightBrand: (props : StyleFunctionProps) => ({
           bg: mode("#F2EFFF", "whiteAlpha.100")(props),
           color: mode("brand.500", "white")(props),
+          _focus: {
+            bg: mode("#F2EFFF", "whiteAlpha.100")(props),
+          },
+          _active: {
+            bg: mode("secondaryGray.300", "whiteAlpha.100")(props),
+          },
+          _hover: {
+            bg: mode("secondaryGray.400", "whiteAlpha.200")(props),
+          },
+        }),
+        success: (props : StyleFunctionProps) => ({
+          bg: mode("transparent", "whiteAlpha.100")(props),
+          color: mode("green.500", "white")(props),
+          borderRadius:'16px',
+          border:'2px solid',
+          borderColor: mode("green.500", "transparent")(props),
+          _focus: {
+            bg: mode("#F2EFFF", "whiteAlpha.100")(props),
+          },
+          _active: {
+            bg: mode("secondaryGray.300", "whiteAlpha.100")(props),
+          },
+          _hover: {
+            bg: mode("secondaryGray.400", "whiteAlpha.200")(props),
+          },
+        }),
+        primary: (props : StyleFunctionProps) => ({
+          bg: mode("transparent", "whiteAlpha.100")(props),
+          color: mode("brand.500", "white")(props),
+          borderRadius:'16px',
+          border:'2px solid',
+          borderColor: mode("brand.500", "transparent")(props),
+          _focus: {
+            bg: mode("#F2EFFF", "whiteAlpha.100")(props),
+          },
+          _active: {
+            bg: mode("secondaryGray.300", "whiteAlpha.100")(props),
+          },
+          _hover: {
+            bg: mode("secondaryGray.400", "whiteAlpha.200")(props),
+          },
+        }),
+        navy: (props : StyleFunctionProps) => ({
+          bg: mode("transparent", "whiteAlpha.100")(props),
+          color: mode("navy.500", "white")(props),
+          borderRadius:'16px',
+          border:'2px solid',
+          borderColor: mode("navy.500", "transparent")(props),
           _focus: {
             bg: mode("#F2EFFF", "whiteAlpha.100")(props),
           },

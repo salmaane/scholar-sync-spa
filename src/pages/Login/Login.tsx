@@ -71,7 +71,6 @@ const Login = () => {
             token: data.accessToken,
             type: 'Bearer',
           },
-          refresh: data.refreshToken,
         });
         navigate("/", { replace: true });
       },

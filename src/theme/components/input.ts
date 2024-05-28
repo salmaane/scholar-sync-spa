@@ -30,7 +30,7 @@ export const inputStyles = {
             bg: mode("transparent", "transparent")(props),
             border: "1px solid",
             borderColor: mode(
-              "secondaryGray.100",
+              "navy.500",
               "rgba(135, 140, 189, 0.3)"
             )(props),
             borderRadius: "16px",
@@ -79,7 +79,7 @@ export const inputStyles = {
             bg: "transparent",
             border: "1px solid",
 
-            borderColor: "secondaryGray.100",
+            borderColor: "navy.500",
             borderRadius: "16px",
             _placeholder: { color: "secondaryGray.600" },
           },
@@ -179,8 +179,7 @@ export const inputStyles = {
           field: {
             bg: "transparent",
             border: "1px solid",
-
-            borderColor: "secondaryGray.100",
+            borderColor: "navy.500",
             borderRadius: "16px",
             _placeholder: { color: "secondaryGray.600" },
           },
