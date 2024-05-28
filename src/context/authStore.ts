@@ -3,7 +3,7 @@ import createRefresh from 'react-auth-kit/createRefresh';
 import axios from 'axios';
 
 const refreshApi = createRefresh({
-    interval: 20, // secondes
+    interval: 2, // secondes
     refreshApiCallback: async ({refreshToken}) => {
         try {
             const res = await axios.post(import.meta.env.VITE_SCHOLAR_SYNC_URL +'/auth/refresh-token', {
@@ -13,7 +13,7 @@ const refreshApi = createRefresh({
             return {
                 isSuccess: true,
                 newAuthToken: res.data.accessToken,
-                newAuthTokenExpireIn: 10,
+                newAuthTokenExpireIn: 1,
             };
         } catch (err) {
             console.log(err);

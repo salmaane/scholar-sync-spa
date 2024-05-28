@@ -30,15 +30,13 @@ export default function AdminNavbar(props : NavbarProps) {
   const location = useLocation();
   
   useEffect(() => {
-    // const title = routes.filter((route) => {
-    //   const regex = new RegExp(`^${route.name}(/|$)`);
-    //   console.log(regex.test(location.pathname));
-    //   return regex.test(location.pathname);
-    // })[0]?.name;
+    const title = routes.find((route) => {
+      const regex = new RegExp(`^${route.name}(/|$)`);
+      return regex.test(location.pathname);
+    })?.name;
 
-    //  setTitle(title);
+    setTitle(title);
 
-    //  console.log(title)
   }, [location]);
 
 
