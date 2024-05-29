@@ -6,6 +6,7 @@ import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 type configObj = {
     method : 'get' | 'post' | 'put' | 'delete' | 'patch',
     url: string,
+    data?: any,
     requestConfig: AxiosRequestConfig,
     handleResponse: (data: any) => void;
     handleError: (error: any) => void;
@@ -18,18 +19,23 @@ const useAxiosFunction = (axiosInstance : AxiosInstance) => {
     const [controller, setController] = useState<AbortController>();
     const authToken = useAuthHeader();
 
-    const axiosFetch = ({ method, url, requestConfig, handleResponse, handleError } : configObj) => {
+    const axiosFetch = ({ method, url, data, requestConfig, handleResponse, handleError } : configObj) => {
         setLoading(true);
         const ctrl = new AbortController();
         setController(ctrl);
         
-        axiosInstance[method](url, {
-            ...requestConfig,
-            signal: ctrl.signal,
-            headers: {
-                'Authorization' : authToken
+        axiosInstance(
+            {
+                method: method,
+                url,
+                data,
+                ...requestConfig,
+                signal: ctrl.signal,
+                headers: {
+                    'Authorization': authToken,
+                }
             }
-        })
+        )
         .then(response => {
             setData(response.data);
             handleResponse?.(response.data);

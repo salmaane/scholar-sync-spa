@@ -1,9 +1,10 @@
-import { FormControl, FormLabel, FormErrorMessage, HStack, Input, Stack, Select, Button } from "@chakra-ui/react"
+import { FormControl, FormLabel, FormErrorMessage, Stack, Input, Flex, Select, Button } from "@chakra-ui/react"
 import { useEffect, useState } from "react";
 import useAxiosFunction from "../../hooks/useAxiosFunction";
 import axios from '../../apis/scholarSync'
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
+import {Alert, AlertIcon } from "@chakra-ui/react";
 
 const FORM_VALIDATION = Yup.object().shape({
   firstName: Yup.string().required(),
@@ -11,34 +12,59 @@ const FORM_VALIDATION = Yup.object().shape({
   email: Yup.string().email().required(),
   role: Yup.string().oneOf(["ADMIN", "PROF"]).required(),
   password: Yup.string().required(),
-  departmentId: Yup.number().positive(),
-  sectorId: Yup.number().positive(),
+  departmentId: Yup.number().positive().nullable(),
+  sectorId: Yup.number().positive().nullable(),
 });
 
 const CreateUser = () => {
-    const [sectors, setSectors] = useState([]);
-    const [departments, setDepartments] = useState([]);
-    const [, , , axiosFetch] = useAxiosFunction(axios)
+  // Allert
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSuccess(false);
+      setShowError(false);
+    }, 3500);
 
-    useEffect(() => {
-        axiosFetch({
-            url: '/sector',
-            method: 'get',
-            handleResponse: (data : any) => setSectors(data),
-        })
-        axiosFetch({
-          url: "/department",
-          method: "get",
-          handleResponse: (data: any) => setDepartments(data),
-        });
-    }, []);
+    return () => clearTimeout(timer);
+  }, [showSuccess, showError]);
 
-    const onSubmit = (values : any, actions : any) => {
-        console.log(values);
-        console.log("submit")
+  // select input data
+  const [sectors, setSectors] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [, , , axiosFetch] = useAxiosFunction(axios);
+  useEffect(() => {
+    axiosFetch({
+      url: "/sector",
+      method: "get",
+      handleResponse: (data: any) => setSectors(data),
+    });
+    axiosFetch({
+      url: "/department",
+      method: "get",
+      handleResponse: (data: any) => setDepartments(data),
+    });
+  }, []);
 
+  // form submission
+  const onSubmit = (values: any, actions: any) => {
+    axiosFetch({
+      url:'/admin/register',
+      method:'post',  
+      data: values,
+      handleResponse: () => {
         actions.setSubmitting(false);
-    }
+        setShowSuccess(true)
+        actions.resetForm()
+      },
+      handleError: () => {
+        actions.setSubmitting(false);
+        setShowError(true)
+        actions.resetForm()
+      },
+    })
+  };
+
   return (
     <Formik
       initialValues={{
@@ -47,16 +73,29 @@ const CreateUser = () => {
         email: "",
         role: "PROF",
         password: "",
-        departmentId: null,
-        sectorId: null,
+        departmentId: undefined,
+        sectorId: undefined,
       }}
       onSubmit={onSubmit}
       validationSchema={FORM_VALIDATION}
     >
       {(props) => (
         <Form>
-          <Stack gap={3}>
-            <HStack w={"100%"} gap={4}>
+          <Flex flexDirection={"column"} gap={3}>
+            <Alert status="success" variant="left-accent" hidden={!showSuccess}>
+              <AlertIcon />
+              User created successfully !
+            </Alert>
+            <Alert status="error" variant="left-accent" hidden={!showError}>
+              <AlertIcon />
+              Something went wrong, try again
+            </Alert>
+            <Stack
+              w={"100%"}
+              spacing={4}
+              alignItems={"start"}
+              direction={["column", "column", "row"]}
+            >
               <Field name="firstName">
                 {({ field, form }: any) => (
                   <FormControl
@@ -91,8 +130,13 @@ const CreateUser = () => {
                   </FormControl>
                 )}
               </Field>
-            </HStack>
-            <HStack w={"100%"} gap={4}>
+            </Stack>
+            <Stack
+              w={"100%"}
+              gap={4}
+              alignItems={"start"}
+              direction={["column", "column", "row"]}
+            >
               <Field name="email">
                 {({ field, form }: any) => (
                   <FormControl
@@ -128,9 +172,14 @@ const CreateUser = () => {
                   </FormControl>
                 )}
               </Field>
-            </HStack>
+            </Stack>
             {props.getFieldMeta("role").value == "PROF" && (
-              <HStack w={"100%"} gap={4}>
+              <Stack
+                w={"100%"}
+                gap={4}
+                alignItems={"start"}
+                direction={["column", "column", "row"]}
+              >
                 <Field name="departmentId">
                   {({ field, form }: any) => (
                     <FormControl>
@@ -180,9 +229,14 @@ const CreateUser = () => {
                     </FormControl>
                   )}
                 </Field>
-              </HStack>
+              </Stack>
             )}
-            <HStack w={"100%"} gap={4}>
+            <Stack
+              w={"100%"}
+              gap={4}
+              alignItems={"start"}
+              direction={["column", "column", "row"]}
+            >
               <Field name="password">
                 {({ field, form }: any) => (
                   <FormControl
@@ -200,19 +254,20 @@ const CreateUser = () => {
                   </FormControl>
                 )}
               </Field>
-            </HStack>
+            </Stack>
             <Button
               size="md"
               height="48px"
               width="200px"
               variant={"navy"}
               w={"100%"}
-              mt={3}
+              mt={1}
               type="submit"
+              isLoading={props.isSubmitting}
             >
               Create
             </Button>
-          </Stack>
+          </Flex>
         </Form>
       )}
     </Formik>

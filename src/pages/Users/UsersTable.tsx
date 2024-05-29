@@ -22,7 +22,7 @@ const UsersTable = ({ users }: any) => {
    const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
 
   return (
-    <Card>
+    <Card shadow={'none'} borderRadius={'20px'}>
       <CardHeader>
         <Heading as="h3" size={"md"}>
           Users

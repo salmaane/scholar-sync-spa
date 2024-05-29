@@ -61,10 +61,7 @@ const Login = () => {
     axiosFetch({
       method: "post",
       url: "/auth/authenticate",
-      requestConfig: {
-        email: values.email,
-        password: values.password,
-      },
+      data: values,
       handleResponse: (data: any) => {
         signIn({
           auth: {
