@@ -21,7 +21,7 @@ import { formatDate } from "../../utils/date";
 import { capitalize } from "../../utils/text";
 import { NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
-import ModalDelete from "./ModalDelete";
+import DeleteModal from '../../components/Modal/DeleteModal'
 
 
 const UsersTable = ({ users, setReload }: any) => {
@@ -100,8 +100,11 @@ const UsersTable = ({ users, setReload }: any) => {
         </CardBody>
 
         {selectedUserId != 0 && (
-          <ModalDelete
-            userId={selectedUserId}
+          <DeleteModal
+            url={'/user/' + selectedUserId}
+            message={
+              "Warning: If you delete this user, other entities can be deleted."
+            }
             onClose={() => setSelectedSectorId(0)}
             setReload={setReload}
             setDeleteSuccess={setDeleteSuccess}
