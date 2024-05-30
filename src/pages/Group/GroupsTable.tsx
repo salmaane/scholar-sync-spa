@@ -21,6 +21,7 @@ import {
   import ModalDelete from "./ModalDelete";
   import { useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
+import DeleteModal from "../../components/Modal/DeleteModal";
   const GroupsTable = ({ groups, setReload}: any) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   
@@ -105,8 +106,9 @@ import ModalUpdate from "./ModalUpdate";
         />}
 
         {selectedGroupId!=0 &&
-        <ModalDelete
-          groupId={selectedGroupId}
+        <DeleteModal
+          url={"/group/"+selectedGroupId}
+          message={"Are you sure to delete this group?"}
           onClose={() => setSelectedGroupId(0)}
           setReload={setReload}
           setDeleteSuccess={setDeleteSuccess}

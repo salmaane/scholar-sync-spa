@@ -1,29 +1,30 @@
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Heading,
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th, 
-    Td,
-    TableContainer,
-    IconButton,
-    useColorModeValue,
-    Alert,
-    AlertIcon,
-  } from "@chakra-ui/react";
-  import { MdEdit } from "react-icons/md";
-  import { MdOutlineDeleteOutline } from "react-icons/md";
-  import { capitalize } from "../../utils/text";
-  import ModalDelete from "./ModalDelete";
-  import { useEffect, useState } from "react";
+  Card,
+  CardHeader,
+  CardBody,
+  Heading,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  IconButton,
+  useColorModeValue,
+  Alert,
+  AlertIcon,
+} from "@chakra-ui/react";
+import { MdEdit } from "react-icons/md";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { capitalize } from "../../utils/text";
+import { useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
-  const SectorsTable = ({ sectors, setReload}: any) => {
+import DeleteModal from "../../components/Modal/DeleteModal";
+
+const SectorsTable = ({ sectors, setReload }: any) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
-  
+
   const [selectedSector, setSelectedSector] = useState<any>(null);
   const [selectedSectorId, setSelectedSectorId] = useState(0);
 
@@ -39,24 +40,23 @@ import ModalUpdate from "./ModalUpdate";
     return () => clearTimeout(timer);
   }, [updateSuccess, deleteSuccess]);
 
-    return (
-      <>
+  return (
+    <>
       <Alert status="success" variant="left-accent" hidden={!deleteSuccess}>
-      <AlertIcon />
-      Sector deleted successfully !
+        <AlertIcon />
+        Sector deleted successfully !
       </Alert>
       <Alert status="success" variant="left-accent" hidden={!updateSuccess}>
-      <AlertIcon />
-      Sector updated successfully !
+        <AlertIcon />
+        Sector updated successfully !
       </Alert>
-      <Card shadow={'none'} borderRadius={'20px'}>
+      <Card shadow={"none"} borderRadius={"20px"}>
         <CardHeader>
           <Heading as="h3" size={"md"}>
             Sectors
           </Heading>
         </CardHeader>
         <CardBody>
-
           <TableContainer>
             <Table variant="simple" size={"md"}>
               <Thead>
@@ -94,33 +94,34 @@ import ModalUpdate from "./ModalUpdate";
           </TableContainer>
         </CardBody>
 
-        {selectedSector != null &&
-        <ModalUpdate
-          sector={selectedSector}
-          onClose={() => setSelectedSector(null)}
-          setReload={setReload}
-          setUpdateSuccess={setUpdateSuccess}
-        />}
+        {selectedSector != null && (
+          <ModalUpdate
+            sector={selectedSector}
+            onClose={() => setSelectedSector(null)}
+            setReload={setReload}
+            setUpdateSuccess={setUpdateSuccess}
+          />
+        )}
 
-        {selectedSectorId!=0 &&
-        <ModalDelete
-          sectorId={selectedSectorId}
-          onClose={() => setSelectedSectorId(0)}
-          setReload={setReload}
-          setDeleteSuccess={setDeleteSuccess}
-        />
-        }
-      </Card></>
+        {selectedSectorId != 0 && (
+          <DeleteModal
+            url={"/sector/" + selectedSectorId}
+            message={
+              "Warning: If you delete this sector, the professors assigned to this sector will no longer be assigned to any sector."
+            }
+            onClose={() => setSelectedSectorId(0)}
+            setReload={setReload}
+            setDeleteSuccess={setDeleteSuccess}
+          />
+        )}
+      </Card>
+    </>
+  );
+};
 
+type Sector = {
+  id: number;
+  name: string;
+};
 
-
-    );
-  };
-  
-  type Sector = {
-    id: number,
-    name: string,
-  }
-  
-  export default SectorsTable;
-  
+export default SectorsTable;
