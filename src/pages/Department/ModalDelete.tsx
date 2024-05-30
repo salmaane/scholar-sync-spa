@@ -19,7 +19,6 @@ const ModalDelete = ({ departmentId, onClose, setReload, setDeleteSuccess}:any) 
         url: `/department/${departmentId}`,
         method: 'delete',
     });
-    console.log(departmentId)
     setReload((prev: number)=>prev+1);
     setDeleteSuccess(true);
     onClose();
