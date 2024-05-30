@@ -17,15 +17,15 @@ import {
   } from "@chakra-ui/react";
   import { MdEdit } from "react-icons/md";
   import { MdOutlineDeleteOutline } from "react-icons/md";
-  import { capitalize } from "../../utils/text";
   import ModalDelete from "./ModalDelete";
   import { useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
-  const SectorsTable = ({ sectors, setReload}: any) => {
+  const ClassesTable = ({ classes, setReload}: any) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   
-  const [selectedSector, setSelectedSector] = useState<any>(null);
-  const [selectedSectorId, setSelectedSectorId] = useState(0);
+  const [selectedClass, setSelectedClass] = useState<any>(null);
+  const [action, setAction] = useState("");
+
 
   // Allert
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -43,16 +43,16 @@ import ModalUpdate from "./ModalUpdate";
       <>
       <Alert status="success" variant="left-accent" hidden={!deleteSuccess}>
       <AlertIcon />
-      Sector deleted successfully !
+      Class deleted successfully !
       </Alert>
       <Alert status="success" variant="left-accent" hidden={!updateSuccess}>
       <AlertIcon />
-      Sector updated successfully !
+      Class updated successfully !
       </Alert>
       <Card shadow={'none'} borderRadius={'20px'}>
         <CardHeader>
           <Heading as="h3" size={"md"}>
-            Sectors
+            Classes
           </Heading>
         </CardHeader>
         <CardBody>
@@ -62,26 +62,30 @@ import ModalUpdate from "./ModalUpdate";
               <Thead>
                 <Tr>
                   <Th borderColor={borderColor}>Id</Th>
-                  <Th borderColor={borderColor}>Name</Th>
+                  <Th borderColor={borderColor}>Block</Th>
+                  <Th borderColor={borderColor}>Number</Th>
+                  <Th borderColor={borderColor}>Capacity</Th>
                   <Th borderColor={borderColor}></Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {sectors?.map((sector: Sector, index: number) => (
+                {classes?.map((class_: Class, index: number) => (
                   <Tr key={index}>
-                    <Td>{sector.id}</Td>
-                    <Td>{capitalize(sector.name)}</Td>
+                    <Td>{class_.id}</Td>
+                    <Td>{class_.block}</Td>
+                    <Td>{class_.number}</Td>
+                    <Td>{class_.capacity}</Td>
                     <Td display={"flex"} gap={1}>
                       <IconButton
-                        onClick={() => setSelectedSector(sector)}
+                        onClick={() => {setAction("update");setSelectedClass(class_)}}
                         size={"sm"}
                         variant="lightBrand"
                         aria-label="update"
                         icon={<MdEdit size={"18px"} />}
                       />
                       <IconButton
-                        onClick={() => setSelectedSectorId(sector.id)}
-                        size={"sm"}
+                        onClick={() => {setAction("delete");setSelectedClass(class_)}}
+                        size={"sm"} 
                         variant="lightBrand"
                         aria-label="delete"
                         icon={<MdOutlineDeleteOutline size={"18px"} />}
@@ -94,18 +98,18 @@ import ModalUpdate from "./ModalUpdate";
           </TableContainer>
         </CardBody>
 
-        {selectedSector != null &&
+        {selectedClass != null &&  action=="update" &&
         <ModalUpdate
-          sector={selectedSector}
-          onClose={() => setSelectedSector(null)}
+          class_={selectedClass}
+          onClose={() => setSelectedClass(null)}
           setReload={setReload}
           setUpdateSuccess={setUpdateSuccess}
         />}
 
-        {selectedSectorId!=0 &&
+        {selectedClass!=null && action=="delete" &&
         <ModalDelete
-          sectorId={selectedSectorId}
-          onClose={() => setSelectedSectorId(0)}
+          class_={selectedClass}
+          onClose={() => setSelectedClass(null)}
           setReload={setReload}
           setDeleteSuccess={setDeleteSuccess}
         />
@@ -117,10 +121,12 @@ import ModalUpdate from "./ModalUpdate";
     );
   };
   
-  type Sector = {
+  type Class = {
     id: number,
-    name: string,
+    block: string,
+    capacity: number,
+    number: number,
   }
   
-  export default SectorsTable;
+  export default ClassesTable;
   

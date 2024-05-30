@@ -34,7 +34,8 @@ const ModalDelete = ({ departmentId, onClose, setReload, setDeleteSuccess}:any) 
 
           <Text my={3} color="red.500">
             Warning: If you delete this department, the professors assigned to this department will no longer be assigned to any department.
-          </Text>        </ModalBody>
+          </Text>        
+        </ModalBody>
         <ModalFooter>
           <Button colorScheme="red" mr={3} onClick={onClose}>
             Cancel

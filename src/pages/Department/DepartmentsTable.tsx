@@ -94,10 +94,10 @@ import ModalUpdate from "./ModalUpdate";
           </TableContainer>
         </CardBody>
 
-        {selectedDepartment != null &&
+        {selectedDepartment != null &&  
         <ModalUpdate
           department={selectedDepartment}
-          onClose={() => setSelectedDepartment(null)}
+          onClose={() => setSelectedDepartment<any>(null)}
           setReload={setReload}
           setUpdateSuccess={setUpdateSuccess}
         />}
