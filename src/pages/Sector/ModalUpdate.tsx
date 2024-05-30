@@ -29,55 +29,53 @@ const ModalUpdate = ({ sector, onClose, setReload, setUpdateSuccess }: any) => {
   const [, , , axiosFetch] = useAxiosFunction(axios);
 
   const onSubmit = (values: any, actions: any) => {
-    console.log("Form submission initiated"); 
-
       axiosFetch({
         url: `/sector/${sector.id}`,
-        method: 'put',
+        method: "put",
         data: values,
-      })
-      console.log(values)
-      setUpdateSuccess(true);
-      setReload((prev: number)=>prev+1)
-      onClose();
+        handleResponse: () => {
+          setUpdateSuccess(true);
+          setReload((prev: number) => prev + 1);
+          onClose();
+          actions.setSubmitting(false);
+        },
+        handleError: (error: any) => {
+          console.log(error);
+          actions.setSubmitting(false);
+        },
+      });
   };  
 
   return (
-    <Formik
-      initialValues={{
-        name: sector.name,
-      }}
-      onSubmit={onSubmit}
-      validationSchema={FORM_VALIDATION}
-    >
-      {(props) => (
-        <Form>
-          <Modal isOpen={true} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Update Sector</ModalHeader>
-              <ModalCloseButton />
+    <Modal isOpen={true} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Update Sector</ModalHeader>
+        <ModalCloseButton />
+        <Formik
+          initialValues={{
+            name: sector.name,
+          }}
+          onSubmit={onSubmit}
+          validationSchema={FORM_VALIDATION}
+        >
+          {(props) => (
+            <Form>
               <ModalBody>
                 <Flex flexDirection="column" gap={3}>
                   <Card shadow="none" borderRadius="20px">
                     <CardBody>
-                      <Stack
-                        w="100%"
-                        spacing={4}
-                        alignItems="start"
-                      >
+                      <Stack w="100%" spacing={4} alignItems="start">
                         <Field name="name">
-                          {({ field, form }:any) => (
+                          {({ field, form }: any) => (
                             <FormControl
                               isInvalid={form.errors.name && form.touched.name}
                             >
                               <FormLabel>Name</FormLabel>
-                              <Input
-                                {...field}
-                                variant="auth"
-                                type="text"
-                              />
-                              <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                              <Input {...field} variant="auth" type="text" />
+                              <FormErrorMessage>
+                                {form.errors.name}
+                              </FormErrorMessage>
                             </FormControl>
                           )}
                         </Field>
@@ -93,16 +91,16 @@ const ModalUpdate = ({ sector, onClose, setReload, setUpdateSuccess }: any) => {
                 <Button
                   colorScheme="green"
                   isLoading={props.isSubmitting}
-                  type='submit'
+                  type="submit"
                 >
                   Save
                 </Button>
               </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </Form>
-      )}
-    </Formik>
+            </Form>
+          )}
+        </Formik>
+      </ModalContent>
+    </Modal>
   );
 };
 
