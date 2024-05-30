@@ -1,3 +1,6 @@
-export const capitalize = (text : string) => {
-    return text[0].toUpperCase() + text.substring(1).toLocaleLowerCase()
+export const capitalize = (text: string): string => {
+    return text
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase())
+        .join(' ');
 }
