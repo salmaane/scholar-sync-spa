@@ -11,12 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import AdminNavbarLinks from "./NavbarLinks";
-import routes from "../../context/routes";
 import { useLocation } from "react-router-dom";
+import { capitalize } from "../../utils/text";
 
 export default function AdminNavbar(props : NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [title, setTitle] = useState<string>(); 
+  const [links, setLinks] = useState<string[]>();
 
   useEffect(() => {
     window.addEventListener("scroll", changeNavbar);
@@ -30,14 +30,12 @@ export default function AdminNavbar(props : NavbarProps) {
   const location = useLocation();
   
   useEffect(() => {
-    const title = routes.find((route) => {
-      const regex = new RegExp(`^${route.name}(/|$)`);
-      return regex.test(location.pathname);
-    })?.name;
-
-    setTitle(title);
-
+    setLinks(location.pathname.split('/').map(link => capitalize(link)));
   }, [location]);
+
+  const formatLink = (path:string) => {
+    return (path.split('/')[1].length > 1) ? capitalize(location.pathname.split('/')[1])  : 'Dashboard';
+  }
 
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
@@ -116,17 +114,13 @@ export default function AdminNavbar(props : NavbarProps) {
       >
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
-            <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-              <BreadcrumbLink href="#" color={secondaryText}>
-                Pages
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-
-            <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
-              <BreadcrumbLink href="#" color={secondaryText}>
-                {title}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
+            {links?.map((link) => (
+              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+                <BreadcrumbLink color={secondaryText}>
+                  {link}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            ))}
           </Breadcrumb>
           {/* Here we create navbar brand, based on route name */}
           <Link
@@ -146,7 +140,7 @@ export default function AdminNavbar(props : NavbarProps) {
               boxShadow: "none",
             }}
           >
-            {title}
+            {formatLink(location.pathname)}
           </Link>
         </Box>
         <Box ms="auto" w={{ sm: "100%", md: "unset" }}>
