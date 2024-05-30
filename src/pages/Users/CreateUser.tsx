@@ -5,6 +5,7 @@ import axios from '../../apis/scholarSync'
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import {Alert, AlertIcon } from "@chakra-ui/react";
+import { capitalize } from "../../utils/text";
 
 const FORM_VALIDATION = Yup.object().shape({
   firstName: Yup.string().required(),
@@ -60,7 +61,6 @@ const CreateUser = () => {
       handleError: () => {
         actions.setSubmitting(false);
         setShowError(true)
-        actions.resetForm()
       },
     })
   };
@@ -192,10 +192,11 @@ const CreateUser = () => {
                         isRequired={true}
                         {...field}
                         onChange={form.handleChange}
+                        placeholder="Select a Department"
                       >
                         {departments?.map((department: any, index: number) => (
                           <option key={index} value={department.id}>
-                            {department.name}
+                            {capitalize(department.name)}
                           </option>
                         ))}
                       </Select>
@@ -216,10 +217,11 @@ const CreateUser = () => {
                         {...field}
                         onChange={form.handleChange}
                         variant={"auth"}
+                        placeholder="Select a Sector"
                       >
                         {sectors?.map((sector: any, index: number) => (
                           <option key={index} value={sector.id}>
-                            {sector.name}
+                            {capitalize(sector.name)}
                           </option>
                         ))}
                       </Select>
