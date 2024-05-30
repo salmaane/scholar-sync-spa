@@ -24,7 +24,7 @@ import ModalUpdate from "./ModalUpdate";
   const DepartmentsTable = ({ departments, setReload}: any) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<any>(null);
   const [selectedDepartmentId, setSelectedDepartmentId] = useState(0);
 
   // Allert

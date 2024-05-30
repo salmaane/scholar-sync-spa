@@ -14,17 +14,18 @@ import {
     useColorModeValue,
     Alert,
     AlertIcon,
-  } from "@chakra-ui/react";
-  import { MdEdit } from "react-icons/md";
-  import { MdOutlineDeleteOutline } from "react-icons/md";
-  import { capitalize } from "../../utils/text";
-  import ModalDelete from "./ModalDelete";
-  import { useEffect, useState } from "react";
+} from "@chakra-ui/react";
+import { MdEdit } from "react-icons/md";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { capitalize } from "../../utils/text";
+import ModalDelete from "./ModalDelete";
+import { useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
+
   const SectorsTable = ({ sectors, setReload}: any) => {
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   
-  const [selectedSector, setSelectedSector] = useState(null);
+  const [selectedSector, setSelectedSector] = useState<any>(null);
   const [selectedSectorId, setSelectedSectorId] = useState(0);
 
   // Allert
