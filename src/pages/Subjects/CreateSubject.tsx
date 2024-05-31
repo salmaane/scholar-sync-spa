@@ -11,6 +11,8 @@ const FORM_VALIDATION = Yup.object().shape({
   title:Yup.string().required(),
   level: Yup.string().oneOf(["LEVEL_1", "LEVEL_2", "LEVEL_3"]).required(),
   type: Yup.string().oneOf(["SUBJECT", "ELEMENT"]).required(),
+  professorId: Yup.number().required(),
+  coordinatorId: Yup.number().required(),
 });
 
 const CreateSubject = ({ setReload }: any) => {
@@ -31,10 +33,9 @@ const CreateSubject = ({ setReload }: any) => {
 
   // form submission
   const onSubmit = (values: any, actions: any) => {
-    console.log(values.professor)
-    console.log(values.coordinator)
+
     axiosFetch({
-      url:'/subject',
+      url:'/subject/create',
       method:'post',  
       data: values,
       handleResponse: () => {
@@ -49,6 +50,7 @@ const CreateSubject = ({ setReload }: any) => {
         actions.resetForm()
       },
     })
+
   };
   const [profs, setProfs] = useState<Prof[]>([]);
   useEffect(() => {
@@ -65,8 +67,8 @@ const CreateSubject = ({ setReload }: any) => {
         title: "",
         level: "",  
         type: "",
-        professor: null,
-        coordinator: null,
+        professorId: '',
+        coordinatorId: '',
       }}
       onSubmit={onSubmit}
       validationSchema={FORM_VALIDATION}
@@ -175,13 +177,13 @@ const CreateSubject = ({ setReload }: any) => {
                           alignItems={"start"}
                           direction={["column", "column", "row"]}
                           >
-                          <Field name="professor">
+                          <Field name="professorId">
                             {({ field, form }: any) => (
                               <FormControl>
                                 <FormLabel>Professor</FormLabel>
                                 <Select
                                   isInvalid={
-                                    form.errors.professor && form.touched.professor
+                                    form.errors.professorId && form.touched.professorId
                                   }
                                   variant={"auth"}
                                   isRequired={true}
@@ -190,24 +192,24 @@ const CreateSubject = ({ setReload }: any) => {
                                   placeholder="Select a Professor"
                                 >
                                   {profs?.map((prof: Prof, index: number) => (
-                                    <option key={index} value={prof}>
+                                    <option key={index} value={prof.id}>
                                       {capitalize(prof.email)}
                                     </option>
                                   ))}
                                 </Select>
                                 <FormErrorMessage>
-                                  {form.errors.professor}
+                                  {form.errors.professorId}
                                 </FormErrorMessage>
                               </FormControl>
                             )}
                           </Field>
-                          <Field name="coordinator">
+                          <Field name="coordinatorId">
                             {({ field, form }: any) => (
                               <FormControl>
                                 <FormLabel>Coordinator</FormLabel>
                                 <Select
                                   isInvalid={
-                                    form.errors.coordinator && form.touched.coordinator
+                                    form.errors.coordinatorId && form.touched.coordinatorId
                                   }
                                   variant={"auth"}
                                   isRequired={true}
@@ -216,13 +218,13 @@ const CreateSubject = ({ setReload }: any) => {
                                   placeholder="Select a Coordinator"
                                 >
                                   {profs?.map((prof: Prof, index: number) => (
-                                    <option key={index} value={prof}>
+                                    <option key={index} value={prof.id}>
                                       {capitalize(prof.email)}
                                     </option>
                                   ))}
                                 </Select>
                                 <FormErrorMessage>
-                                  {form.errors.coordinator}
+                                  {form.errors.coordinatorId}
                                 </FormErrorMessage>
                               </FormControl>
                             )}
