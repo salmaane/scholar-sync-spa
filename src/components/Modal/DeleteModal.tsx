@@ -18,15 +18,22 @@ const ModalDelete = ({
   onClose,
   setReload,
   setDeleteSuccess,
+  setShowError
 }: any) => {
   const [, , , axiosFetch] = useAxiosFunction(axios);
   const handleDelete = () => {
     axiosFetch({
       url: url,
       method: "delete",
+      handleResponse: () => {
+        setReload((prev: number) => prev + 1);
+        setDeleteSuccess(true);
+      },
+      handleError: () => {
+        setShowError(true);
+      }
     });
-    setReload((prev: number) => prev + 1);
-    setDeleteSuccess(true);
+
     onClose();
   };
 

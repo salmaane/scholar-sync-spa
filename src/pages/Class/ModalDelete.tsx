@@ -32,8 +32,8 @@ const ModalDelete = ({ class_, onClose, setReload, setDeleteSuccess}:any) => {
         <ModalCloseButton />
         <ModalBody>
 
-          <Text my={3} color="red.500">Are you
-             sure you want to delete class <b>{class_.block=="Amphi"? `${class_.block} ${class_.number}` : `${class_.number+class_.block}`}</b>?
+          <Text my={3} color="red.500">
+            Are you sure you want to delete class <b>{class_.block=="Amphi"? `${class_.block} ${class_.number}` : `${class_.number+class_.block}`}</b>?
           </Text>        
         </ModalBody>
         <ModalFooter>

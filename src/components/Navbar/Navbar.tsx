@@ -114,8 +114,8 @@ export default function AdminNavbar(props : NavbarProps) {
       >
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
-            {links?.map((link) => (
-              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px">
+            {links?.map((link, index) => (
+              <BreadcrumbItem color={secondaryText} fontSize="sm" mb="5px" key={index}>
                 <BreadcrumbLink color={secondaryText}>
                   {link}
                 </BreadcrumbLink>
