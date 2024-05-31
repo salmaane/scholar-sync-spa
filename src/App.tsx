@@ -12,7 +12,7 @@ import Login from './pages/Login/Login';
 import RootLayout from './pages/Layout/RootLayout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Users from './pages/Users/Users';
-import Subject from './pages/Subjects/Subjects';
+import Subject from './pages/Subjects/Subject';
 import Exam from './pages/Exam/Exam';
 import Class from './pages/Class/Class';
 import Group from './pages/Group/Group';
@@ -32,7 +32,7 @@ const router = createBrowserRouter(
             <Route index element={<Users />} />
             <Route path='create' element={<CreateUser/>} />
           </Route>
-          <Route path="subject" element={<Subject />} />
+          <Route path="subject" element={<Subject/>} />
           <Route path="exam" element={<Exam />} />
           <Route path="class" element={<Class />} />
           <Route path="group" element={<Group />} />

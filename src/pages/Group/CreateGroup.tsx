@@ -246,8 +246,8 @@ const CreateDepartment = ({ setReload }: any) => {
                       </Stack>
 
                       {/* display proffesors */}
-                      {users && 
-                      }
+                      {/* {users && 
+                      } */}
 
                   </CardBody>
                 </Card>
