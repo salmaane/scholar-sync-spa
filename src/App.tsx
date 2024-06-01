@@ -19,6 +19,7 @@ import Group from './pages/Group/Group';
 import Department from './pages/Department/Department';
 import Sector from './pages/Sector/Sector';
 import CreateUser from './pages/Users/CreateUser';
+import CreateExam from './pages/Exam/CreateExam';
 
 
 const router = createBrowserRouter(
@@ -30,10 +31,13 @@ const router = createBrowserRouter(
           <Route index element={<Dashboard />} />
           <Route path="user">
             <Route index element={<Users />} />
-            <Route path='create' element={<CreateUser/>} />
+            <Route path="create" element={<CreateUser />} />
           </Route>
-          <Route path="subject" element={<Subject/>} />
-          <Route path="exam" element={<Exam />} />
+          <Route path="subject" element={<Subject />} />
+          <Route path="exam">
+            <Route index element={<Exam />} />
+            <Route path='create' element={<CreateExam/>}/>
+          </Route>
           <Route path="class" element={<Class />} />
           <Route path="group" element={<Group />} />
           <Route path="department" element={<Department />} />

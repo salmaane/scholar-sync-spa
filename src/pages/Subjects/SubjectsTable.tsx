@@ -1,5 +1,5 @@
 import {
-    Card,
+    Card, Flex,
     CardHeader,
     CardBody,
     Heading,
@@ -147,6 +147,13 @@ import { capitalize } from "../../utils/text";
                 </Tbody>
               </Table>
             </TableContainer>
+            {subjects?.length == 0 ? (
+              <Flex justifyContent={"center"} py={5}>
+                <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                  No Subjects Found
+                </Heading>
+              </Flex>
+            ) : null}
           </CardBody>
 
           {selectedSubject != null && action == "update" && (

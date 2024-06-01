@@ -30,7 +30,7 @@ const ModalDelete = ({
         setDeleteSuccess(true);
       },
       handleError: () => {
-        setShowError(true);
+        setShowError?.(true);
       }
     });
 

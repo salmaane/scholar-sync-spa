@@ -6,7 +6,8 @@ import {
     useColorModeValue,
     Alert,
     AlertIcon,
-    Tag
+    Tag,
+    Flex
   } from "@chakra-ui/react";
   import { MdOutlineDeleteOutline } from "react-icons/md";
   import { capitalize } from "../../utils/text";
@@ -92,6 +93,13 @@ import {
                 </Tbody>
               </Table>
             </TableContainer>
+            {groups?.length == 0 ? (
+              <Flex justifyContent={"center"} py={5}>
+                <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                  No Groups Found
+                </Heading>
+              </Flex>
+            ) : null}
           </CardBody>
 
           {selectedGroupId != 0 && (

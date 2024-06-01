@@ -9,7 +9,6 @@ import createStore from 'react-auth-kit/createStore';
 //             const res = await axios.post(import.meta.env.VITE_SCHOLAR_SYNC_URL +'/auth/refresh-token', {
 //               headers: {'Authorization': `Bearer ${refreshToken}`}
 //             });
-//             console.log("Refreshing")
 //             return {
 //                 isSuccess: true,
 //                 newAuthToken: res.data.accessToken,

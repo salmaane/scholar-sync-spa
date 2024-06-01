@@ -1,5 +1,5 @@
 import {
-    Card,
+    Card, Flex,
     CardHeader,
     CardBody,
     Heading,
@@ -31,10 +31,12 @@ import {
   // Allert
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setUpdateSuccess(false);
       setDeleteSuccess(false);
+      setShowError(false);
     }, 3500);
 
     return () => clearTimeout(timer);
@@ -49,6 +51,10 @@ import {
         <Alert status="success" variant="left-accent" hidden={!updateSuccess}>
           <AlertIcon />
           Department updated successfully !
+        </Alert>
+        <Alert status="error" variant="left-accent" hidden={!showError}>
+          <AlertIcon />
+          Something went wrong, try again
         </Alert>
         <Card shadow={"none"} borderRadius={"20px"}>
           <CardHeader>
@@ -92,6 +98,13 @@ import {
                 </Tbody>
               </Table>
             </TableContainer>
+            {departments?.length == 0 ? (
+              <Flex justifyContent={"center"} py={5}>
+                <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                  No Departments Found
+                </Heading>
+              </Flex>
+            ) : null}
           </CardBody>
 
           {selectedDepartment != null && (
@@ -105,13 +118,14 @@ import {
 
           {selectedDepartmentId != 0 && (
             <DeleteModal
-              url={'/department/' + selectedDepartmentId}
+              url={"/department/" + selectedDepartmentId}
               message={
                 "Warning: If you delete this department, the professors assigned to this department will no longer be assigned to any department."
               }
               onClose={() => setSelectedDepartmentId(0)}
               setReload={setReload}
               setDeleteSuccess={setDeleteSuccess}
+              setShowError={setShowError}
             />
           )}
         </Card>

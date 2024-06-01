@@ -1,5 +1,5 @@
 import {
-  Card,
+  Card, Flex,
   CardHeader,
   CardBody,
   Heading,
@@ -31,10 +31,12 @@ const SectorsTable = ({ sectors, setReload }: any) => {
   // Allert
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setUpdateSuccess(false);
       setDeleteSuccess(false);
+      setShowError(false);
     }, 3500);
 
     return () => clearTimeout(timer);
@@ -49,6 +51,10 @@ const SectorsTable = ({ sectors, setReload }: any) => {
       <Alert status="success" variant="left-accent" hidden={!updateSuccess}>
         <AlertIcon />
         Sector updated successfully !
+      </Alert>
+      <Alert status="error" variant="left-accent" hidden={!showError}>
+        <AlertIcon />
+        Something went wrong, try again
       </Alert>
       <Card shadow={"none"} borderRadius={"20px"}>
         <CardHeader>
@@ -92,6 +98,13 @@ const SectorsTable = ({ sectors, setReload }: any) => {
               </Tbody>
             </Table>
           </TableContainer>
+          {sectors?.length == 0 ? (
+            <Flex justifyContent={"center"} py={5}>
+              <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                No Sectors Found
+              </Heading>
+            </Flex>
+          ) : null}
         </CardBody>
 
         {selectedSector != null && (
@@ -111,6 +124,7 @@ const SectorsTable = ({ sectors, setReload }: any) => {
             }
             onClose={() => setSelectedSectorId(0)}
             setReload={setReload}
+            setShowError={setShowError}
             setDeleteSuccess={setDeleteSuccess}
           />
         )}

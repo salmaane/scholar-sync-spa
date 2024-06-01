@@ -1,5 +1,5 @@
 import {
-  Card,
+  Card, Flex,
   CardHeader,
   CardBody,
   Heading,
@@ -97,11 +97,18 @@ const UsersTable = ({ users, setReload }: any) => {
               </Tbody>
             </Table>
           </TableContainer>
+          {users?.length == 0 ? (
+            <Flex justifyContent={"center"} py={5}>
+              <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                No Users Found
+              </Heading>
+            </Flex>
+          ) : null}
         </CardBody>
 
         {selectedUserId != 0 && (
           <DeleteModal
-            url={'/user/' + selectedUserId}
+            url={"/user/" + selectedUserId}
             message={
               "Warning: If you delete this user, other entities can be deleted."
             }

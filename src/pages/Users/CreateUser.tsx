@@ -1,10 +1,19 @@
-import { FormControl, FormLabel, FormErrorMessage, Stack, Input, Flex, Select, Button } from "@chakra-ui/react"
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Stack,
+  Input,
+  Flex,
+  Select,
+  Button,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useAxiosFunction from "../../hooks/useAxiosFunction";
-import axios from '../../apis/scholarSync'
+import axios from "../../apis/scholarSync";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
-import {Alert, AlertIcon } from "@chakra-ui/react";
+import { Alert, AlertIcon } from "@chakra-ui/react";
 import { capitalize } from "../../utils/text";
 
 const FORM_VALIDATION = Yup.object().shape({
@@ -50,19 +59,19 @@ const CreateUser = () => {
   // form submission
   const onSubmit = (values: any, actions: any) => {
     axiosFetch({
-      url:'/admin/register',
-      method:'post',  
+      url: "/admin/register",
+      method: "post",
       data: values,
       handleResponse: () => {
         actions.setSubmitting(false);
-        setShowSuccess(true)
-        actions.resetForm()
+        setShowSuccess(true);
+        actions.resetForm();
       },
       handleError: () => {
         actions.setSubmitting(false);
-        setShowError(true)
+        setShowError(true);
       },
-    })
+    });
   };
 
   return (
@@ -274,6 +283,6 @@ const CreateUser = () => {
       )}
     </Formik>
   );
-}
+};
 
-export default CreateUser
+export default CreateUser;

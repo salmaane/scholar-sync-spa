@@ -68,7 +68,6 @@ const CreateDepartment = ({ setReload }: any) => {
       setUsers([]);
     } else {
       if (criteria == "RANDOM") {
-        console.log("random criteria");
         axiosFetch({
           url: "/group/prof",
           method: "get",
