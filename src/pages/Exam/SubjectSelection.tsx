@@ -14,11 +14,15 @@ import useAxiosFunction from "../../hooks/useAxiosFunction";
 import axios from "../../apis/scholarSync";
 import { capitalize } from "../../utils/text";
 
-const SubjectSelection = ({ setSubject }: any) => {
+const SubjectSelection = ({
+  setSubject,
+  setExamDate,
+  setStartHour
+}: any) => {
   const [sectorId, setSectorId] = useState<number>();
   const [level, setLevel] = useState<string>();
   const [subjects, setSubjects] = useState([]);
-  
+
   // get sectors data
   const [sectors, setSectors] = useState([]);
   const [, , , axiosFetch] = useAxiosFunction(axios);
@@ -88,17 +92,25 @@ const SubjectSelection = ({ setSubject }: any) => {
               </Select>
             </FormControl>
           </Stack>
-          {(subjects?.length > 0 && sectorId && level) ? (
+          {subjects?.length > 0 && sectorId && level ? (
             <FormControl>
               <FormLabel>Subject</FormLabel>
-              <Select 
-                isRequired={true} 
-                variant={"auth"} 
+              <Select
+                isRequired={true}
+                variant={"auth"}
                 onChange={(e) => {
-                    setSubject(subjects.find((subject : any) => subject.id == Number(e.target.value)))
+                  if (e.target.value == "") {
+                    setExamDate()
+                    setStartHour()
+                  }
+                  setSubject(
+                    subjects.find(
+                      (subject: any) => subject.id == Number(e.target.value)
+                    )
+                  );
                 }}
                 placeholder="Select a subject"
-                >
+              >
                 {subjects?.map((subject: any, index: number) => (
                   <option key={index} value={subject.id}>
                     {capitalize(subject.title)}
@@ -106,11 +118,13 @@ const SubjectSelection = ({ setSubject }: any) => {
                 ))}
               </Select>
             </FormControl>
-          ) : 
-            <Flex justifyContent={'center'} py={4}>
-              <Heading size={"md"} color={"gray"} opacity={"0.8"}>No Subjects Found</Heading>
+          ) : (
+            <Flex justifyContent={"center"} py={4}>
+              <Heading size={"md"} color={"gray"} opacity={"0.8"}>
+                No Subjects Found
+              </Heading>
             </Flex>
-          }
+          )}
         </Stack>
       </CardBody>
     </Card>

@@ -74,9 +74,18 @@ const CreateExam = () => {
 
   // form submission
   const onSubmit = (values: any, actions: any) => {
-    console.log(values);
-
-    actions.setSubmitting(false);
+    axiosFetch({
+      url: '/exam',
+      method:'post',
+      data: values,
+      handleResponse: (res:any) => {
+        console.log(res);
+        actions.setSubmitting(false);
+      },
+      handleError: () => {
+        actions.setSubmitting(false);
+      }
+    });
   };
 
   const FORM_VALIDATION = Yup.object().shape({
@@ -121,6 +130,7 @@ const CreateExam = () => {
     classes: Yup.array()
       .min(1, "You must select at least one class")
       .required("Classes is required"),
+    subjectId: Yup.number().min(1),
   });
 
   const DATE_SCHEMA = Yup.date()
@@ -158,9 +168,9 @@ const CreateExam = () => {
 
   return (
     <Flex w={"100%"} direction={"column"} gap={8}>
-      <SubjectSelection setSubject={setSubject} />
+      <SubjectSelection setSubject={setSubject} setExamDate={setExamDate} setStartHour={setStartHour}/>
       {
-        /*subject*/ true && (
+        subject && (
           <Card shadow={"none"} borderRadius={"20px"}>
             <CardHeader>
               <Heading as="h3" size={"sm"} color={"#111111"}>
@@ -180,6 +190,7 @@ const CreateExam = () => {
                     startHour: "",
                     groupId: 0,
                     classes: [],
+                    subjectId: subject?.id,
                   }}
                   onSubmit={onSubmit}
                   validationSchema={FORM_VALIDATION}
@@ -291,6 +302,7 @@ const CreateExam = () => {
                               </FormControl>
                             )}
                           </Field>
+                          <Field name="subjectId" hidden/>
                         </Stack>
                         <Stack
                           w={"100%"}
@@ -435,7 +447,6 @@ const CreateExam = () => {
                                     isRequired={true}
                                     placeholder="Select a group"
                                     onChange={form.handleChange}
-                                    value={""}
                                     disabled={professorCriteria == "random"}
                                   >
                                     {groups?.map((group: any) => (
@@ -519,7 +530,7 @@ const CreateExam = () => {
                                       (aClass: any, index: number) => (
                                         <Flex key={aClass.id}>
                                           <Field
-                                            name={`classes.${index}.id`}
+                                            name={`classes.${index}.classId`}
                                             hidden
                                             readOnly
                                           />
@@ -554,7 +565,7 @@ const CreateExam = () => {
                                                   onChange={(e) => {
                                                     form.handleChange(e);
                                                     form.setFieldValue(
-                                                      `classes.${index}.id`,
+                                                      `classes.${index}.classId`,
                                                       aClass.id
                                                     );
                                                   }}
