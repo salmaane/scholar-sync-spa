@@ -32,7 +32,7 @@ const SubjectSelection = ({ setSubject }: any) => {
 
   // get subject data
   useEffect(() => {
-    if (sectorId != 0 && level != "") {
+    if (sectorId && level) {
       axiosFetch({
         url: `/subject/sector/${sectorId}/level/${level}`,
         method: "get",
